@@ -1,4 +1,5 @@
 import numpy as np
+import math
 
 def YIQ_to_RGB(yiq):
     rgb = np.zeros(yiq.shape)
@@ -63,6 +64,27 @@ def if_darker(yiq1,yiq2):
     darker[:,:,2] = np.minimum(yiq1[:,:,2],yiq2[:,:,2])
     return darker
 
+def more_ligther(yiq):
+    result = np.zeros(yiq.shape)
+    result[:,:,0] = np.sqrt(yiq[:,:,0])
+    result[:,:,1] = yiq[:,:,1]
+    result[:,:,2] = yiq[:,:,2]
+    return result
+
+def more_darker(yiq):
+    result = np.zeros(yiq.shape)
+    result[:,:,0] = yiq[:,:,0] * yiq[:,:,0]
+    result[:,:,1] = yiq[:,:,1]
+    result[:,:,2] = yiq[:,:,2]
+    return result
+
+def histogram_lineal(yiq,a,b):
+    result = np.zeros(yiq.shape)
+    result[:,:,0] = np.vectorize(lineal_trozos)(yiq[:,:,0],a,b)
+    result[:,:,1] = yiq[:,:,1]
+    result[:,:,2] = yiq[:,:,2]
+    return result
+
 def convolution1(image, kernel = np.ones((1,1))):
     print(image.shape)
     print(kernel.shape)
@@ -78,3 +100,12 @@ def convolution2(image, kernel = np.ones((1,1))):
     for x, y in np.ndindex(convolved.shape):
         convolved[x,y] = (image[x:x+kernel.shape[0],y:y+kernel.shape[1]]*kernel).sum()
     return convolved
+
+def lineal_trozos(x,a,b):
+    m = ((0-1)/(a-b))
+    if x < a :
+        return 0
+    elif x > b:
+        return 1
+    else:
+        return m*(x-a)

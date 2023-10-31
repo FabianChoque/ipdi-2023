@@ -32,3 +32,11 @@ Realizar operaciones aritmeticas con 2 imagenes de igual tamaño. La interfaz cu
 ```bash
 python TP2-OperacionesAritmeticas.py
 ```
+
+# Trabajo Practico N 3
+
+Realizar operaciones sobre el histograma de luminancias aplicando funciones de raiz cuadrada, exponencial o lineal a trozos sobre la imagen. La interfaz cuenta con la seleccion de una imagen para calcular su histograma segun diferentes contadores y tambien la imagen resultante aplicando los filtros disponibles.
+
+```bash
+python TP3-OperacionesLuminancia.py
+```
