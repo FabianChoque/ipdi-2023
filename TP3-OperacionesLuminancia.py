@@ -102,7 +102,9 @@ class FrMain(Frame):
 
     def save_image(self):
         im = Image.fromarray(self.img2)
-        im.save("descargas/image-modified.png")
+        extension = self.filename.split(".")[-1]
+        name = self.filename.split(".")[0]
+        im.save(f"descargas/{name}_{self.filter}.{extension}")
         messagebox.showinfo(message="Imagen guardada exitosamente", title="Imagen")
 
     def operation_selected(self,event):
@@ -180,6 +182,7 @@ class FrMain(Frame):
     
     def open_image(self):
         path_image = filedialog.askopenfilename()
+        self.filename = path_image.split("/")[-1]
         if path_image:
             # Abre la imagen seleccionada con Pillow
             image = Image.open(path_image)
