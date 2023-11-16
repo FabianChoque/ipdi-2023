@@ -80,7 +80,9 @@ def more_darker(yiq):
 
 def histogram_lineal(yiq,a,b):
     result = np.zeros(yiq.shape)
-    result[:,:,0] = np.vectorize(lineal_trozos)(yiq[:,:,0],a,b)
+    for x in range(yiq[:,:,0].shape[0]):
+        for y in range(yiq[:,:,0].shape[1]):
+            result[x,y,0] = lineal_trozos(yiq[:,:,0][x,y],a,b)
     result[:,:,1] = yiq[:,:,1]
     result[:,:,2] = yiq[:,:,2]
     return result
@@ -102,7 +104,7 @@ def convolution2(image, kernel = np.ones((1,1))):
     return convolved
 
 def lineal_trozos(x,a,b):
-    m = ((0-1)/(a-b))
+    m = (1/(b-a))
     if x < a :
         return 0
     elif x > b:

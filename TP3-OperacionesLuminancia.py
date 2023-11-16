@@ -140,7 +140,7 @@ class FrMain(Frame):
     def calculate(self):
         img_clip = np.clip(self.image_saved/255,0.,1.) #normalizando [0,1]
         yiq = nf.RGB_to_YIQ(img_clip)
-        self.calculate_histogram(yiq[:,:,0][0],self.fr_frecuency1)
+        self.calculate_histogram(yiq[:,:,0].flatten(),self.fr_frecuency1)
         
         if (self.filter == 'Raiz'):
             yiq_modified = nf.more_ligther(yiq)
@@ -161,7 +161,7 @@ class FrMain(Frame):
         canvas = FigureCanvasTkAgg(fig, master=self.fr_frecuency2)# Crea el area de dibujo en Tkinter
         canvas.draw()
         canvas.get_tk_widget().grid(row=1, column=0)
-        self.calculate_histogram(yiq_modified[:,:,0][0],self.fr_frecuency2)
+        self.calculate_histogram(yiq_modified[:,:,0].flatten(),self.fr_frecuency2)
 
     def calculate_histogram(self,values,frecuency1):
         fig, ax = plt.subplots(figsize=(4, 3))
