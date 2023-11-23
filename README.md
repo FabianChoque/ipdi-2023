@@ -32,6 +32,7 @@ Realizar operaciones aritmeticas con 2 imagenes de igual tamaño. La interfaz cu
 ```bash
 python TP2-OperacionesAritmeticas.py
 ```
+[![suma.png](https://i.postimg.cc/9f7LLhgm/suma.png)](https://postimg.cc/5Hf5tZMT)
 
 # Trabajo Practico N 3
 
@@ -40,3 +41,13 @@ Realizar operaciones sobre el histograma de luminancias aplicando funciones de r
 ```bash
 python TP3-OperacionesLuminancia.py
 ```
+[![frecuencia.png](https://i.postimg.cc/65Mb3zGX/frecuencia.png)](https://postimg.cc/fJ0fqcK2)
+
+# Trabajo Practico N 4
+
+Cargar una imagen en tonos de gris, convirtiendo la misma a YIQ y manteniendo solo la banda de luminancia Y. Al resutado aplicar el filtrado por convolucion pasabajos, detectores de bordes y pasabanda.
+
+```bash
+python TP4-Convolucion.py
+```
+[![convolucion.png](https://i.postimg.cc/m2KZ032b/convolucion.png)](https://postimg.cc/56qMzCCG)

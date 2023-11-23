@@ -87,20 +87,15 @@ def histogram_lineal(yiq,a,b):
     result[:,:,2] = yiq[:,:,2]
     return result
 
-def convolution1(image, kernel = np.ones((1,1))):
-    print(image.shape)
-    print(kernel.shape)
-    convolved = np.zeros((np.array(image.shape)-np.array(kernel.shape)+1))
-    print(convolved.shape)
-    for x in range(convolved.shape[0]):
-        for y in range(convolved.shape[1]):
-            convolved[x,y] = (image[x:x+kernel.shape[0],y:y+kernel.shape[1]]*kernel).sum()
-    return convolved
-
-def convolution2(image, kernel = np.ones((1,1))):
+def convolution(image, kernel = np.ones((1,1))):
     convolved = np.zeros((np.array(image.shape)-np.array(kernel.shape)+1))
     for x, y in np.ndindex(convolved.shape):
-        convolved[x,y] = (image[x:x+kernel.shape[0],y:y+kernel.shape[1]]*kernel).sum()
+        aux = (image[x:x+kernel.shape[0],y:y+kernel.shape[1]]*kernel).sum()
+        if aux < 0 :
+            aux = 0
+        if aux > 1:
+            aux = 1
+        convolved[x,y] = aux
     return convolved
 
 def lineal_trozos(x,a,b):
@@ -111,3 +106,57 @@ def lineal_trozos(x,a,b):
         return 1
     else:
         return m*(x-a)
+
+def kernel_barlet(size):
+    row=np.zeros(size)
+    half = int(size/2 + 0.5)
+    for x in range(size):
+        if(x<half):
+            row[x] = (x+1)
+        else:
+            row[x] = row[x-1]-1
+    matrix = complete_matrix(row,size)
+    return matrix, matrix/matrix.sum()
+
+def kernel_gaussiano(size):
+    row = triangulo_pascal(size-1)
+    matrix = complete_matrix(row,size)
+    return matrix, matrix/matrix.sum()
+
+def kernel_laplaciano(version):
+    if version == 4:
+        return np.array([[0, -1, 0], [-1, 4, -1], [0, -1, 0]])
+    if version == 8:
+        return np.array([[-1, -1, -1], [-1, 8, -1], [-1, -1, -1]])
+
+def kernel_mejora(version):
+    # return np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
+    k_laplaciano = kernel_laplaciano(version)
+    i = np.array([[0, 0, 0], [0, 1, 0], [0, 0, 0]])
+    sum_kernels = i+k_laplaciano*0.2
+    return sum_kernels
+
+
+def factorial(num):
+    if num > 0:
+        return int(num*factorial(num-1))
+    else:
+        return 1
+
+def combinatoria(num1, num2):
+    return int(factorial(num1) / (factorial(num2)*factorial(num1-num2)))
+
+def triangulo_pascal(size):
+    row = np.zeros(size+1)
+    for x in range(size+1):
+        row[x] = combinatoria(size,x)
+    return row
+
+def complete_matrix(row,size):
+    m=np.zeros((size,size))
+    m[0,:] = row
+    m[:,0] = np.transpose(row)
+    for x in range(size-1):
+        for y in range(size-1):
+            m[x+1,y+1] = m[x+1,0] * m[0,y+1]
+    return m
