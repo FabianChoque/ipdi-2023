@@ -1,5 +1,6 @@
+import cv2
 import numpy as np
-import math
+from scipy import ndimage
 
 def YIQ_to_RGB(yiq):
     rgb = np.zeros(yiq.shape)
@@ -87,15 +88,20 @@ def histogram_lineal(yiq,a,b):
     result[:,:,2] = yiq[:,:,2]
     return result
 
-def convolution(image, kernel = np.ones((1,1))):
+def convolution(image, kernel = np.ones((1,1)), option = 'sum'):
     convolved = np.zeros((np.array(image.shape)-np.array(kernel.shape)+1))
-    for x, y in np.ndindex(convolved.shape):
-        aux = (image[x:x+kernel.shape[0],y:y+kernel.shape[1]]*kernel).sum()
-        if aux < 0 :
-            aux = 0
-        if aux > 1:
-            aux = 1
-        convolved[x,y] = aux
+    if option == 'sum':
+        for x in range(convolved.shape[0]):
+            for y in range(convolved.shape[1]):
+                convolved[x,y] = (image[x:x+kernel.shape[0],y:y+kernel.shape[1]]*kernel).sum()
+    if option == 'max':
+        for x in range(convolved.shape[0]):
+            for y in range(convolved.shape[1]):
+                convolved[x,y] = (image[x:x+kernel.shape[0],y:y+kernel.shape[1]]*kernel).max()      
+    if option == 'min':
+        for x in range(convolved.shape[0]):
+            for y in range(convolved.shape[1]):
+                convolved[x,y] = (image[x:x+kernel.shape[0],y:y+kernel.shape[1]]*kernel).min()               
     return convolved
 
 def lineal_trozos(x,a,b):
@@ -160,3 +166,49 @@ def complete_matrix(row,size):
         for y in range(size-1):
             m[x+1,y+1] = m[x+1,0] * m[0,y+1]
     return m
+
+def _morph_multiband(im, se, op):
+    result = np.zeros(im.shape)
+    offset = (np.array(se.shape)-1)//2
+    im = np.pad(im,[(offset[0],offset[0]),(offset[1],offset[1]),(0,0)],'edge')
+    for y, x in np.ndindex(result.shape[:2]):
+        pixels = im[y:y+se.shape[0], x:x+se.shape[1]][se]
+        result[y, x] = pixels[op(pixels[:,0])]
+    return result
+
+def _morph_color(im, se, op):
+    im2 = (RGB_to_YIQ(im)[:, :, 0])[:, :, np.newaxis]
+    im2 = np.concatenate((im2, im),axis=2)
+    result = _morph_multiband(im2, se, op)[:, :, 1:]
+    return result
+
+def im_dilate(im, se):
+    if im.ndim == 3:
+        return _morph_color(im, se, np.argmax)
+    else:
+        return ndimage.grey_dilation(im, footprint = se)
+    
+def im_erode(im, se):
+    if im.ndim == 3:
+        return _morph_color(im, se, np.argmin)
+    else:
+        return ndimage.grey_erosion(im, footprint = se)
+
+def im_border_ext(im, se):
+    return im_dilate(im, se) - im
+
+def im_border_int(im, se):
+    return im - im_erode(im, se)
+
+def im_gradient(im, se):
+    return im_dilate(im,se) - im_erode(im,se)
+
+def im_open(im, se):
+    return im_dilate(im_erode(im, se), se)
+
+def im_close(im, se):
+    return im_erode(im_dilate(im, se), se)
+
+def mediana(im,kernel):
+    img_formated = np.array(255*im, dtype = 'uint8')
+    return cv2.medianBlur(img_formated,kernel)

@@ -51,3 +51,13 @@ Cargar una imagen en tonos de gris, convirtiendo la misma a YIQ y manteniendo so
 python TP4-Convolucion.py
 ```
 [![convolucion.png](https://i.postimg.cc/m2KZ032b/convolucion.png)](https://postimg.cc/56qMzCCG)
+
+
+# Trabajo Practico N 5
+
+Aplicar operaciones basicas de morfologia binaria a una imagen. Se incluye la capacidad de copiar la componente de la imagen procesada en la componente original, para poder aplicar dos o más filtrados en secuencia.
+
+```bash
+python TP5-Morfologia.py
+```
+[![tp5-morfo.png](https://i.postimg.cc/dQjDRSgB/tp5-morfo.png)](https://postimg.cc/w336gFqy)
