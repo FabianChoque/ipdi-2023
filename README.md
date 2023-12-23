@@ -61,3 +61,17 @@ Aplicar operaciones basicas de morfologia binaria a una imagen. Se incluye la ca
 python TP5-Morfologia.py
 ```
 [![tp5-morfo.png](https://i.postimg.cc/dQjDRSgB/tp5-morfo.png)](https://postimg.cc/w336gFqy)
+
+
+# Ejercicio Ponds
+
+Determina el área de los cuencos y arroyos que forman parte del agua acumulada en la playa. Para ello se aplicó ecualización de la imagen, segmentación con Método MeanShift, Binarización con Método de Otsu y detección de contornos con el algoritmo Teh-Chin Chain.
+
+[![ponds.png](https://i.postimg.cc/G3D8VP6J/ponds.png)](https://postimg.cc/jCsSJfxL)
+
+
+# TPFinal - Diagnóstico Automático de Tuberculosis en Radiografías de Tórax aplicando Machine Learning
+
+Determina una máscara para la segmentación de los pulmones aplicando ténicas de morfología, segmentación y binarización
+
+[![pul.png](https://i.postimg.cc/TYX943N1/pul.png)](https://postimg.cc/xqtMkn2V)
